@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/theme/app_theme.dart';
-
 class SettingTile extends StatelessWidget {
   const SettingTile({
     super.key,
@@ -20,31 +18,28 @@ class SettingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final muted = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.55);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Material(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(AppRadii.pill),
+        color: const Color(0xFF1B1D1F),
+        borderRadius: BorderRadius.circular(38),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadii.pill),
+          borderRadius: BorderRadius.circular(38),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 16, 10),
+            padding: const EdgeInsets.fromLTRB(14, 10, 18, 10),
             child: Row(
               children: [
                 Container(
                   width: 48,
                   height: 48,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),
-                    ),
+                    color: Color(0xFF26292D),
                   ),
-                  child: Icon(icon, size: 22),
+                  child: Icon(icon, size: 21, color: Colors.white),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,6 +49,7 @@ class SettingTile extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
+                          color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -63,13 +59,21 @@ class SettingTile extends StatelessWidget {
                         subtitle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: muted, fontSize: 13),
+                        style: const TextStyle(
+                          color: Color(0xFF8E95A0),
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
-                trailing ?? Icon(Icons.chevron_right, color: muted),
+                trailing ??
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Colors.white54,
+                      size: 20,
+                    ),
               ],
             ),
           ),

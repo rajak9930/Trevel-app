@@ -13,25 +13,29 @@ class BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<AppController>();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SafeArea(
-      minimum: const EdgeInsets.fromLTRB(16, 0, 16, AppSpacing.navBottom),
+      minimum: const EdgeInsets.fromLTRB(18, 0, 18, 22),
       child: Obx(() {
         final selected = controller.selectedTab.value;
         return Container(
-          height: 68,
+          height: 66,
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: (isDark ? AppColors.panel : Colors.white).withValues(alpha: 0.94),
-            borderRadius: BorderRadius.circular(AppRadii.nav),
-            boxShadow: const [
-              BoxShadow(color: Colors.black26, blurRadius: 18),
+            color: const Color(0xFF13191D).withValues(alpha: 0.96),
+            borderRadius: BorderRadius.circular(36),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.45),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
             ],
           ),
           child: Row(
             children: [
               _NavSlot(
                 active: selected == 0,
+                label: 'Dashboard',
                 onTap: () => controller.selectTab(0),
                 child: const Icon(Icons.home_outlined),
               ),
@@ -51,7 +55,7 @@ class BottomNav extends StatelessWidget {
                 active: selected == 3,
                 label: 'Account',
                 onTap: () => controller.selectTab(3),
-                child: const RemoteAvatar(radius: 18, url: _profile),
+                child: const RemoteAvatar(radius: 14, url: _profile),
               ),
             ],
           ),

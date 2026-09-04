@@ -4,7 +4,6 @@ import '../../controllers/app_controller.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/setting_tile.dart';
-import '../../widgets/remote_image.dart';
 import '../../routes/app_routes.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -14,6 +13,7 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) => const AppBackground(
         child: Scaffold(
           backgroundColor: Colors.transparent,
+          extendBody: true,
           bottomNavigationBar: BottomNav(),
           body: AccountBody(),
         ),
@@ -25,25 +25,10 @@ class AccountBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AppController>();
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(28, 26, 28, 100),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
         children: [
-          const Text('Account', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 24),
-          const RemoteAvatar(
-            radius: 42,
-            url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            'Alice Premium',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          ),
-          const Text('Toronto, Canada', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
-          const SizedBox(height: 30),
           SettingTile(
             icon: Icons.person_outline,
             title: 'Edit Profile',
@@ -66,15 +51,12 @@ class AccountBody extends StatelessWidget {
             icon: Icons.palette_outlined,
             title: 'Appearance',
             subtitle: 'Customize your app experience',
-            trailing: Obx(
-              () => Switch(
-                value: controller.isDarkMode.value,
-                onChanged: (_) => controller.toggleTheme(),
-              ),
-            ),
+            onTap: () {
+              Get.find<AppController>().toggleTheme();
+            },
           ),
           SettingTile(
-            icon: Icons.help_outline,
+            icon: Icons.chat_bubble_outline,
             title: 'Help & Feedback',
             subtitle: 'Get help or share feedback',
             onTap: () => Get.toNamed(AppRoutes.help),
@@ -95,7 +77,21 @@ class AccountBody extends StatelessWidget {
             icon: Icons.credit_card_outlined,
             title: 'Subscription',
             subtitle: 'Manage your plan and billing',
-            trailing: const Text('Coming Soon', style: TextStyle(color: Colors.orange, fontSize: 12)),
+            trailing: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color(0xFF3B2A12),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Text(
+                'Coming Soon',
+                style: TextStyle(
+                  color: Color(0xFFFF9D00),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
             onTap: () => Get.toNamed(AppRoutes.subscription),
           ),
         ],
