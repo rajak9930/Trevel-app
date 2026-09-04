@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../controllers/app_controller.dart';
 import '../core/theme/app_theme.dart';
-import '../routes/app_routes.dart';
 import 'remote_image.dart';
 
 class BottomNav extends StatelessWidget {
@@ -23,7 +22,7 @@ class BottomNav extends StatelessWidget {
           height: 68,
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: (isDark ? AppColors.panel : Colors.white).withOpacity(.94),
+            color: (isDark ? AppColors.panel : Colors.white).withValues(alpha: 0.94),
             borderRadius: BorderRadius.circular(AppRadii.nav),
             boxShadow: const [
               BoxShadow(color: Colors.black26, blurRadius: 18),
@@ -79,7 +78,7 @@ class _NavSlot extends StatelessWidget {
   Widget build(BuildContext context) {
     final showLabel = active && label != null;
     final content = Material(
-      color: active ? AppColors.blue : Colors.white.withOpacity(.08),
+      color: active ? AppColors.blue : Colors.white.withValues(alpha: 0.08),
       borderRadius: BorderRadius.circular(28),
       child: InkWell(
         onTap: onTap,

@@ -64,7 +64,7 @@ class MonthCalendar extends StatelessWidget {
                 child: Text(
                   '$overflow',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(.35),
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.35),
                     fontSize: 16,
                   ),
                 ),

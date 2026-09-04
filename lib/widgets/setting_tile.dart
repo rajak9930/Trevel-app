@@ -20,7 +20,7 @@ class SettingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final muted = Theme.of(context).colorScheme.onSurface.withOpacity(.55);
+    final muted = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.55);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Material(
@@ -39,7 +39,7 @@ class SettingTile extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(.12),
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),
                     ),
                   ),
                   child: Icon(icon, size: 22),
