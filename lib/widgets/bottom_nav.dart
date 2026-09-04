@@ -17,11 +17,15 @@ class BottomNav extends StatelessWidget {
       minimum: const EdgeInsets.fromLTRB(18, 0, 18, 22),
       child: Obx(() {
         final selected = controller.selectedTab.value;
+        final theme = Theme.of(context);
         return Container(
           height: 66,
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: const Color(0xFF13191D).withValues(alpha: 0.96),
+            color: (theme.brightness == Brightness.dark
+                ? AppColors.panel
+                : Colors.white)
+              .withValues(alpha: 0.96),
             borderRadius: BorderRadius.circular(36),
             boxShadow: [
               BoxShadow(
@@ -82,43 +86,43 @@ class _NavSlot extends StatelessWidget {
   Widget build(BuildContext context) {
     final showLabel = active && label != null;
     final content = Material(
-      color: active ? AppColors.blue : Colors.white.withValues(alpha: 0.08),
-      borderRadius: BorderRadius.circular(28),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(28),
-        child: SizedBox(
-          height: 56,
-          width: showLabel ? null : 56,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: showLabel ? 12 : 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconTheme(
-                  data: IconThemeData(
-                    color: active
-                        ? Colors.white
-                        : Theme.of(context).colorScheme.onSurface,
-                    size: 22,
-                  ),
-                  child: child,
-                ),
+          color: active ? AppColors.blue : Colors.white.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(28),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(28),
+            child: SizedBox(
+              height: 56,
+              width: showLabel ? null : 56,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: showLabel ? 12 : 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconTheme(
+                      data: IconThemeData(
+                        color: active
+                            ? Colors.white
+                            : Theme.of(context).colorScheme.onSurface,
+                        size: 22,
+                      ),
+                      child: child,
+                    ),
                 if (showLabel) ...[
                   const SizedBox(width: 8),
                   Flexible(
-                    child: Text(
-                      label!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13,
-                      ),
+                              child: Text(
+                                label!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13,
+                                ),
+                            ),
                     ),
-                  ),
-                ],
+                  ],
               ],
             ),
           ),

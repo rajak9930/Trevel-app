@@ -12,6 +12,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<AppController>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenWidth = MediaQuery.sizeOf(context).width;
     // Drawer items container width: leaves a clear gap before the shifted main screen
     final drawerMenuWidth = (screenWidth * 0.65).clamp(240.0, 275.0);
@@ -19,24 +20,31 @@ class AppDrawer extends StatelessWidget {
     return Material(
       type: MaterialType.transparency,
       child: DefaultTextStyle(
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Arial',
           decoration: TextDecoration.none,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
         child: SizedBox.expand(
           child: Stack(
             children: [
               // Deep atmospheric navy gradient
-              const DecoratedBox(
+              DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFF070B0E),
-                      Color(0xFF09141D),
-                      Color(0xFF0A273D),
-                    ],
+                    colors: isDark
+                        ? const [
+                            Color(0xFF070B0E),
+                            Color(0xFF09141D),
+                            Color(0xFF0A273D),
+                          ]
+                        : const [
+                            Color(0xFFF5F7F8),
+                            Colors.white,
+                            Color(0xFFE4F5FF),
+                          ],
                   ),
                 ),
                 child: SizedBox.expand(),
@@ -114,7 +122,7 @@ class AppDrawer extends StatelessWidget {
                           ),
                           _DrawerItem(
                             id: 'payment',
-                            icon: Icons.notifications_none,
+                            icon: Icons.credit_card_outlined,
                             label: 'Payment',
                             width: drawerMenuWidth,
                             onTap: () => _open(
@@ -125,7 +133,7 @@ class AppDrawer extends StatelessWidget {
                           ),
                           _DrawerItem(
                             id: 'translate',
-                            icon: Icons.notifications_none,
+                            icon: Icons.translate,
                             label: 'Translate',
                             width: drawerMenuWidth,
                             onTap: () =>
@@ -133,7 +141,7 @@ class AppDrawer extends StatelessWidget {
                           ),
                           _DrawerItem(
                             id: 'privacy',
-                            icon: Icons.notifications_none,
+                            icon: Icons.lock_outline,
                             label: 'Privacy',
                             width: drawerMenuWidth,
                             onTap: () => _open(
@@ -146,7 +154,7 @@ class AppDrawer extends StatelessWidget {
                           _SectionLabel(leftPadding: 20),
                           _DrawerItem(
                             id: 'listing',
-                            icon: Icons.notifications_none,
+                            icon: Icons.list_alt_outlined,
                             label: 'Listing',
                             width: drawerMenuWidth,
                             onTap: () =>
@@ -154,7 +162,7 @@ class AppDrawer extends StatelessWidget {
                           ),
                           _DrawerItem(
                             id: 'host',
-                            icon: Icons.notifications_none,
+                            icon: Icons.people_outline,
                             label: 'Host',
                             width: drawerMenuWidth,
                             onTap: () =>
@@ -164,7 +172,7 @@ class AppDrawer extends StatelessWidget {
                           _SectionLabel(leftPadding: 20),
                           _DrawerItem(
                             id: 'dark_mode',
-                            icon: Icons.notifications_none,
+                            icon: Icons.dark_mode_outlined,
                             label: 'Dark Mode',
                             showChevron: false,
                             width: drawerMenuWidth,
@@ -175,7 +183,7 @@ class AppDrawer extends StatelessWidget {
                           ),
                           _DrawerItem(
                             id: 'update',
-                            icon: Icons.notifications_none,
+                            icon: Icons.system_update_outlined,
                             label: 'Update',
                             width: drawerMenuWidth,
                             onTap: () =>
@@ -244,6 +252,7 @@ class _DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.onSurface;
     return Obx(() {
       final controller = Get.find<AppController>();
       final selected = controller.selectedDrawerItem.value == id;
@@ -273,11 +282,11 @@ class _DrawerItem extends StatelessWidget {
                         radius: 23,
                         backgroundColor: selected
                             ? Colors.white
-                            : Colors.white.withValues(alpha: 0.08),
+                            : primary.withValues(alpha: 0.08),
                         child: Icon(
                           icon,
                           size: 21,
-                          color: selected ? AppColors.blue : Colors.white,
+                          color: selected ? AppColors.blue : primary,
                         ),
                       ),
                       const SizedBox(width: 14),
@@ -287,7 +296,7 @@ class _DrawerItem extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: primary,
                             fontSize: 16,
                             fontWeight:
                                 selected ? FontWeight.w600 : FontWeight.w400,
@@ -307,8 +316,8 @@ class _DrawerItem extends StatelessWidget {
                           ),
                           child: Text(
                             badge!,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: primary,
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               decoration: TextDecoration.none,
@@ -319,7 +328,7 @@ class _DrawerItem extends StatelessWidget {
                         Icon(
                           Icons.chevron_right,
                           size: 22,
-                          color: Colors.white.withValues(
+                          color: primary.withValues(
                             alpha: selected ? 0.95 : 0.45,
                           ),
                         )
@@ -348,6 +357,8 @@ class _DrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.onSurface;
+    final secondary = primary.withValues(alpha: 0.6);
     return SizedBox(
       width: width,
       child: Padding(
@@ -360,7 +371,7 @@ class _DrawerHeader extends StatelessWidget {
                   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
             ),
             const SizedBox(width: 13),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -369,7 +380,7 @@ class _DrawerHeader extends StatelessWidget {
                     'Alice Premium',
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: primary,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       decoration: TextDecoration.none,
@@ -380,7 +391,7 @@ class _DrawerHeader extends StatelessWidget {
                     'Toronto, Canada',
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Color(0xFF8E99A4),
+                      color: secondary,
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                       decoration: TextDecoration.none,

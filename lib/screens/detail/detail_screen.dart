@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import '../../controllers/app_controller.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models/destination.dart';
+import '../../routes/app_routes.dart';
 import '../../widgets/app_background.dart';
-import '../../widgets/bottom_nav.dart';
 import '../../widgets/remote_image.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -15,8 +15,6 @@ class DetailScreen extends StatelessWidget {
     return const AppBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        extendBody: true,
-        bottomNavigationBar: BottomNav(),
         body: DetailBody(),
       ),
     );
@@ -30,6 +28,10 @@ class DetailBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<AppController>();
     return Obx(() {
+      final theme = Theme.of(context);
+      final isDark = theme.brightness == Brightness.dark;
+      final primaryText = theme.colorScheme.onSurface;
+      final secondaryText = isDark ? AppColors.muted : const Color(0xFF5F6872);
       final destIndex = controller.selectedDestination.value.clamp(0, destinations.length - 1);
       final destination = destinations[destIndex];
 
@@ -46,6 +48,20 @@ class DetailBody extends StatelessWidget {
                 child: RemoteImage(
                   url: destination.imageUrl,
                   fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                top: MediaQuery.paddingOf(context).top + 12,
+                left: 18,
+                child: _BackButton(
+                  onPressed: () {
+                    if (controller.isDetailOpen.value ||
+                        Get.currentRoute == AppRoutes.home) {
+                      controller.closeDestination();
+                    } else {
+                      Get.back();
+                    }
+                  },
                 ),
               ),
               // Carousel pill indicators
@@ -84,7 +100,7 @@ class DetailBody extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
               decoration: BoxDecoration(
-                color: const Color(0xFF191B1D),
+                color: theme.colorScheme.surface,
                 borderRadius: BorderRadius.circular(36),
                 boxShadow: [
                   BoxShadow(
@@ -105,11 +121,11 @@ class DetailBody extends StatelessWidget {
                         url: AppAssets.profileUrl,
                       ),
                       const SizedBox(width: 14),
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           'Hosted by Trang Luxury,\nLifestyle',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: primaryText,
                             fontSize: 19,
                             fontWeight: FontWeight.w700,
                             height: 1.25,
@@ -124,12 +140,12 @@ class DetailBody extends StatelessWidget {
                   // Ratings and reviews row
                   Row(
                     children: [
-                      const Icon(Icons.star, color: Colors.white, size: 18),
+                      Icon(Icons.star, color: primaryText, size: 18),
                       const SizedBox(width: 6),
-                      const Text(
+                      Text(
                         '4.9',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: primaryText,
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
@@ -138,14 +154,14 @@ class DetailBody extends StatelessWidget {
                       Text(
                         '|',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.3),
+                          color: primaryText.withValues(alpha: 0.3),
                         ),
                       ),
                       const SizedBox(width: 14),
-                      const Text(
+                      Text(
                         '1,648 reviews',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: primaryText,
                           fontSize: 14,
                         ),
                       ),
@@ -153,14 +169,14 @@ class DetailBody extends StatelessWidget {
                       Text(
                         '|',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.3),
+                          color: primaryText.withValues(alpha: 0.3),
                         ),
                       ),
                       const SizedBox(width: 14),
-                      const Text(
+                      Text(
                         'OCT 24 – 26',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: primaryText,
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
@@ -178,17 +194,17 @@ class DetailBody extends StatelessWidget {
                         radius: 19,
                         backgroundColor: AppColors.blue,
                         child: const Icon(
-                          Icons.notifications_none,
+                          Icons.location_on,
                           color: Colors.white,
                           size: 20,
                         ),
                       ),
                       const SizedBox(width: 12),
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           '1155 Rue Sherbrooke Ouest, Toronto,\nCanada H3A 2N3',
                           style: TextStyle(
-                            color: Color(0xFF9EA4AA),
+                            color: secondaryText,
                             fontSize: 14,
                             height: 1.35,
                           ),
@@ -207,10 +223,10 @@ class DetailBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Description',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: primaryText,
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),
@@ -220,8 +236,8 @@ class DetailBody extends StatelessWidget {
                   destination.description.isEmpty
                       ? 'Experience a comfortable and memorable stay at our hotel, where modern amenities, warm hospitality, and convenient surroundings come together. Designed for both business and leisure travelers, the hotel offers well-appointed rooms, quality facilities, and attentive service to make every stay relaxing and enjoyable. Guests can enjoy comfortable accommodation, delicious dining options, high-speed Wi-Fi, and convenient access to local attractions.'
                       : destination.description,
-                  style: const TextStyle(
-                    color: Color(0xFF8E95A0),
+                  style: TextStyle(
+                    color: secondaryText,
                     fontSize: 15,
                     height: 1.55,
                   ),
@@ -233,5 +249,24 @@ class DetailBody extends StatelessWidget {
       );
     });
   }
+}
+
+class _BackButton extends StatelessWidget {
+  const _BackButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: const BoxDecoration(
+          color: Colors.black54,
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+          onPressed: onPressed,
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          tooltip: 'Back',
+        ),
+      );
 }
 

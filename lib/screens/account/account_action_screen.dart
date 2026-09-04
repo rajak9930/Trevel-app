@@ -15,9 +15,10 @@ class AccountActionScreen extends StatelessWidget {
   Widget build(BuildContext context) => AppBackground(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          bottomNavigationBar: const BottomNav(),
-          body: SafeArea(
-            child: ListView(
+          body: Stack(
+            children: [
+              SafeArea(
+                child: ListView(
               padding: const EdgeInsets.fromLTRB(28, 22, 28, 32),
               children: [
                 Row(children: [IconButton(onPressed: Get.back, icon: const Icon(Icons.arrow_back)), const SizedBox(width: 8), Expanded(child: Text(title, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w800)))]),
@@ -26,19 +27,27 @@ class AccountActionScreen extends StatelessWidget {
                 const SizedBox(height: 36),
                 Center(child: CircleAvatar(radius: 46, backgroundColor: AppColors.blue, child: Icon(icon, size: 42, color: Colors.white))),
                 const SizedBox(height: 36),
-                _field('Full name', 'Alice Premium'),
-                _field('Location', 'Toronto, Canada'),
-                _field('Email address', 'alice@example.com'),
+                _field(context, 'Full name', 'Alice Premium'),
+                _field(context, 'Location', 'Toronto, Canada'),
+                _field(context, 'Email address', 'alice@example.com'),
                 const SizedBox(height: 16),
                 FilledButton(onPressed: () => Get.snackbar('Saved', '$title changes saved successfully.', snackPosition: SnackPosition.BOTTOM, margin: const EdgeInsets.all(16)), child: const Text('Save changes')),
               ],
-            ),
+                ),
+              ),
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 18,
+                child: BottomNav(),
+              ),
+            ],
           ),
         ),
       );
 
-  Widget _field(String label, String value) => Padding(
+  Widget _field(BuildContext context, String label, String value) => Padding(
         padding: const EdgeInsets.only(bottom: 16),
-        child: TextFormField(initialValue: value, decoration: InputDecoration(labelText: label, filled: true, fillColor: Colors.white10, border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none))),
+        child: TextFormField(initialValue: value, decoration: InputDecoration(labelText: label, filled: true, fillColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08), border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none))),
       );
 }

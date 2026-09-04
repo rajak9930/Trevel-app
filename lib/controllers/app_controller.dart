@@ -9,10 +9,19 @@ class AppController extends GetxController {
   final selectedTab = 0.obs;
   final isDarkMode = true.obs;
   final selectedDestination = 0.obs;
+  final isDetailOpen = false.obs;
   final searchQuery = ''.obs;
   final selectedDrawerItem = 'payment'.obs;
   final visibleMonth = DateTime(2026, 2).obs;
   final selectedDays = <int>{24, 25}.obs;
+
+  void updateSearch(String query) {
+    searchQuery.value = query.trim();
+  }
+
+  void clearSearch() {
+    searchQuery.value = '';
+  }
 
   void selectDrawerItem(String id) {
     selectedDrawerItem.value = id;
@@ -20,6 +29,7 @@ class AppController extends GetxController {
 
   void selectTab(int index) {
     selectedTab.value = index;
+    isDetailOpen.value = false;
     zoomDrawerController.close?.call();
     if (Get.currentRoute != AppRoutes.home) {
       Get.until((route) => route.settings.name == AppRoutes.home);
@@ -32,7 +42,14 @@ class AppController extends GetxController {
 
   void openDestination(int index) {
     selectedDestination.value = index;
-    selectTab(1);
+    selectedTab.value = 1;
+    isDetailOpen.value = true;
+    zoomDrawerController.close?.call();
+  }
+
+  void closeDestination() {
+    isDetailOpen.value = false;
+    selectedTab.value = 1;
   }
 
   void shiftMonth(int delta) {

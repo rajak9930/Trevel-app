@@ -11,6 +11,8 @@ class DestinationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryText = theme.colorScheme.onSurface;
     return GestureDetector(
       onTap: () {
         final controller = Get.find<AppController>();
@@ -39,7 +41,7 @@ class DestinationCard extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(24, 22, 24, 24),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF191B1D),
+                  color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(36),
                 ),
                 child: Column(
@@ -48,8 +50,8 @@ class DestinationCard extends StatelessWidget {
                   children: [
                     Text(
                       destination.title,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: primaryText,
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                       ),
@@ -58,9 +60,9 @@ class DestinationCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _meta('Distance', destination.distance),
-                        _meta('Available', destination.available),
-                        _meta('Price', destination.price),
+                        _meta(context, 'Distance', destination.distance),
+                        _meta(context, 'Available', destination.available),
+                        _meta(context, 'Price', destination.price),
                       ],
                     ),
                   ],
@@ -73,13 +75,16 @@ class DestinationCard extends StatelessWidget {
     );
   }
 
-  Widget _meta(String label, String value) => Column(
+  Widget _meta(BuildContext context, String label, String value) {
+    final primaryText = Theme.of(context).colorScheme.onSurface;
+    final secondaryText = primaryText.withValues(alpha: 0.55);
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(
-              color: Color(0xFF8E95A0),
+            style: TextStyle(
+              color: secondaryText,
               fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
@@ -87,12 +92,13 @@ class DestinationCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             value,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: primaryText,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
           ),
         ],
       );
+  }
 }

@@ -31,17 +31,26 @@ class MainShell extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           extendBody: true,
-          bottomNavigationBar: const BottomNav(),
-          body: Obx(
-            () => IndexedStack(
-              index: controller.selectedTab.value,
-              children: const [
-                HomeScreen(),
-                DetailScreen(),
-                BookingScreen(),
-                AccountScreen(),
-              ],
-            ),
+          body: Stack(
+            children: [
+              Obx(
+                () => IndexedStack(
+                  index: controller.selectedTab.value,
+                  children: const [
+                    HomeScreen(),
+                    DetailScreen(),
+                    BookingScreen(),
+                    AccountScreen(),
+                  ],
+                ),
+              ),
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 18,
+                child: BottomNav(),
+              ),
+            ],
           ),
         ),
       ),

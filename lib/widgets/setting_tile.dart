@@ -18,10 +18,13 @@ class SettingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.onSurface;
+    final secondary = primary.withValues(alpha: 0.55);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Material(
-        color: const Color(0xFF1B1D1F),
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(38),
         child: InkWell(
           onTap: onTap,
@@ -33,11 +36,11 @@ class SettingTile extends StatelessWidget {
                 Container(
                   width: 48,
                   height: 48,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xFF26292D),
+                    color: primary.withValues(alpha: 0.08),
                   ),
-                  child: Icon(icon, size: 21, color: Colors.white),
+                  child: Icon(icon, size: 21, color: primary),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -48,8 +51,8 @@ class SettingTile extends StatelessWidget {
                         title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: primary,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -59,8 +62,8 @@ class SettingTile extends StatelessWidget {
                         subtitle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF8E95A0),
+                        style: TextStyle(
+                          color: secondary,
                           fontSize: 13,
                         ),
                       ),
@@ -69,9 +72,9 @@ class SettingTile extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 trailing ??
-                    const Icon(
+                    Icon(
                       Icons.chevron_right,
-                      color: Colors.white54,
+                      color: secondary,
                       size: 20,
                     ),
               ],

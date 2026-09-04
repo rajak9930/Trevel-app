@@ -13,8 +13,17 @@ class TripsScreen extends StatelessWidget {
   Widget build(BuildContext context) => const AppBackground(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          bottomNavigationBar: BottomNav(),
-          body: TripsBody(),
+          body: Stack(
+            children: [
+              const TripsBody(),
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 18,
+                child: BottomNav(),
+              ),
+            ],
+          ),
         ),
       );
 }
@@ -54,7 +63,9 @@ class _TripCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: Colors.white10),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+            ),
           ),
           child: Row(children: [
             ClipRRect(

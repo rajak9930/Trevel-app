@@ -51,17 +51,31 @@ class HomeScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           extendBody: true,
-          bottomNavigationBar: const BottomNav(),
-          body: Obx(
-            () => IndexedStack(
-              index: controller.selectedTab.value,
-              children: const [
-                _HomeBody(),
-                DetailBody(),
-                CalendarBody(),
-                AccountBody(),
-              ],
-            ),
+          body: Stack(
+            children: [
+              Obx(
+                () => IndexedStack(
+                  index: controller.selectedTab.value,
+                  children: const [
+                    _HomeBody(),
+                    _HostelsBody(),
+                    CalendarBody(),
+                    AccountBody(),
+                  ],
+                ),
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 18,
+                child: Obx(
+                    () => controller.selectedTab.value == 1 &&
+                      controller.isDetailOpen.value
+                      ? const SizedBox.shrink()
+                      : const BottomNav(),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -74,8 +88,23 @@ class _HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<AppController>();
     return SafeArea(
-      child: CustomScrollView(
+      child: Obx(() {
+        final query = controller.searchQuery.value.toLowerCase();
+        final matches = destinations
+            .asMap()
+            .entries
+            .where((entry) {
+              final destination = entry.value;
+              return query.isEmpty ||
+                  destination.title.toLowerCase().contains(query) ||
+                  destination.city.toLowerCase().contains(query) ||
+                  destination.country.toLowerCase().contains(query);
+            })
+            .toList();
+
+        return CustomScrollView(
         slivers: [
           const SliverPadding(
             padding: EdgeInsets.fromLTRB(22, 20, 22, 0),
@@ -107,21 +136,112 @@ class _HomeBody extends StatelessWidget {
           ),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(22, 0, 22, 110),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: DestinationCard(
-                    destination: destinations[index],
-                    index: index,
+            sliver: matches.isEmpty
+                ? const SliverToBoxAdapter(child: _SearchEmptyState())
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: DestinationCard(
+                          destination: matches[index].value,
+                          index: matches[index].key,
+                        ),
+                      ),
+                      childCount: matches.length,
+                    ),
                   ),
-                ),
-                childCount: destinations.length,
-              ),
-            ),
           ),
         ],
+        );
+      }),
+    );
+  }
+}
+
+class _SearchEmptyState extends StatelessWidget {
+  const _SearchEmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<AppController>();
+    final primary = Theme.of(context).colorScheme.onSurface;
+    final muted = primary.withValues(alpha: 0.55);
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 240),
+      child: Padding(
+        key: ValueKey(controller.searchQuery.value),
+        padding: const EdgeInsets.only(top: 72, bottom: 80),
+        child: Column(
+          children: [
+            Icon(Icons.search_off_rounded, size: 58, color: muted),
+            const SizedBox(height: 16),
+            Text(
+              'No stays found',
+              style: TextStyle(
+                color: primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Try another city or country.',
+              style: TextStyle(color: muted, fontSize: 14),
+            ),
+            const SizedBox(height: 20),
+            TextButton.icon(
+              onPressed: controller.clearSearch,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Clear search'),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _HostelsBody extends StatelessWidget {
+  const _HostelsBody();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<AppController>();
+    final primaryText = Theme.of(context).colorScheme.onSurface;
+    return Obx(
+      () => controller.isDetailOpen.value
+          ? const DetailBody()
+          : SafeArea(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(22, 24, 22, 120),
+                children: [
+                  Text(
+                    'Hotels Resort',
+                    style: TextStyle(
+                      color: primaryText,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Choose your next stay',
+                    style: TextStyle(color: Color(0xFF8E95A0), fontSize: 16),
+                  ),
+                  const SizedBox(height: 24),
+                  ...List.generate(
+                    destinations.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: DestinationCard(
+                        destination: destinations[index],
+                        index: index,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
@@ -130,9 +250,12 @@ class _Header extends StatelessWidget {
   const _Header();
 
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) {
+    final primaryText = Theme.of(context).colorScheme.onSurface;
+    final iconBackground = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08);
+    return Row(
         children: [
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -141,7 +264,7 @@ class _Header extends StatelessWidget {
                   fontSize: 34,
                   height: 1.1,
                   fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                  color: primaryText,
                 ),
               ),
               Text(
@@ -150,7 +273,7 @@ class _Header extends StatelessWidget {
                   fontSize: 34,
                   height: 1.1,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: primaryText,
                 ),
               ),
             ],
@@ -163,9 +286,9 @@ class _Header extends StatelessWidget {
             child: Container(
               width: 58,
               height: 58,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFF1B262E),
+                color: iconBackground,
               ),
               child: Stack(
                 alignment: Alignment.center,
@@ -182,7 +305,7 @@ class _Header extends StatelessWidget {
                         width: 20,
                         height: 2.2,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: primaryText,
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -191,7 +314,7 @@ class _Header extends StatelessWidget {
                         width: 20,
                         height: 2.2,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: primaryText,
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -203,37 +326,80 @@ class _Header extends StatelessWidget {
           ),
         ],
       );
+  }
 }
 
-class _SearchField extends StatelessWidget {
+class _SearchField extends StatefulWidget {
   const _SearchField();
 
   @override
-  Widget build(BuildContext context) => TextField(
+  State<_SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<_SearchField> {
+  late final TextEditingController textController;
+
+  @override
+  void initState() {
+    super.initState();
+    textController = TextEditingController(
+      text: Get.find<AppController>().searchQuery.value,
+    );
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appController = Get.find<AppController>();
+    final theme = Theme.of(context);
+    final muted = theme.colorScheme.onSurface.withValues(alpha: 0.55);
+    return Obx(() {
+      final query = appController.searchQuery.value;
+      if (textController.text != query) {
+        textController.value = TextEditingValue(
+          text: query,
+          selection: TextSelection.collapsed(offset: query.length),
+        );
+      }
+      return TextField(
+      controller: textController,
+      onChanged: appController.updateSearch,
         decoration: InputDecoration(
           hintText: 'Search Location',
-          hintStyle: const TextStyle(
-            color: Color(0xFF8E95A0),
+          hintStyle: TextStyle(
+            color: muted,
             fontSize: 15,
             fontWeight: FontWeight.w400,
           ),
-          prefixIcon: const Icon(
+          prefixIcon: Icon(
             Icons.search,
-            color: Color(0xFF8E95A0),
+            color: muted,
             size: 22,
           ),
-          suffixIcon: const Icon(
-            Icons.mic_none,
-            color: Color(0xFF8E95A0),
-            size: 22,
-          ),
+          suffixIcon: query.isEmpty
+              ? Icon(Icons.mic_none, color: muted, size: 22)
+              : IconButton(
+                  onPressed: () {
+                    textController.clear();
+                    appController.clearSearch();
+                  },
+                  icon: Icon(Icons.close, color: muted, size: 22),
+                  tooltip: 'Clear search',
+                ),
           filled: true,
-          fillColor: const Color(0xFF161E26),
+          fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.08),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32),
             borderSide: BorderSide.none,
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
         ),
-      );
+        );
+    });
+      }
 }
