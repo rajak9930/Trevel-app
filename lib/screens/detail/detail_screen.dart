@@ -38,7 +38,7 @@ class DetailBody extends StatelessWidget {
       return ListView(
         padding: EdgeInsets.zero,
         children: [
-          // Hero Image with carousel indicators
+         
           Stack(
             alignment: Alignment.bottomCenter,
             children: [
@@ -64,7 +64,7 @@ class DetailBody extends StatelessWidget {
                   },
                 ),
               ),
-              // Carousel pill indicators
+             
               Positioned(
                 bottom: 24,
                 child: Row(
@@ -93,7 +93,6 @@ class DetailBody extends StatelessWidget {
             ],
           ),
 
-          // Floating sheet card overlapping image
           Transform.translate(
             offset: const Offset(0, -12),
             child: Container(
@@ -113,7 +112,7 @@ class DetailBody extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Host row
+                
                   Row(
                     children: [
                       const RemoteAvatar(
@@ -137,7 +136,7 @@ class DetailBody extends StatelessWidget {
 
                   const SizedBox(height: 22),
 
-                  // Ratings and reviews row
+               
                   Row(
                     children: [
                       Icon(Icons.star, color: primaryText, size: 18),
@@ -186,7 +185,7 @@ class DetailBody extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  // Location address row
+                
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -217,7 +216,7 @@ class DetailBody extends StatelessWidget {
             ),
           ),
 
-          // Description section
+    
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 16, 24, 120),
             child: Column(

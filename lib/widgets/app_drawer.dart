@@ -14,7 +14,7 @@ class AppDrawer extends StatelessWidget {
     final controller = Get.find<AppController>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenWidth = MediaQuery.sizeOf(context).width;
-    // Drawer items container width: leaves a clear gap before the shifted main screen
+   
     final drawerMenuWidth = (screenWidth * 0.65).clamp(240.0, 275.0);
 
     return Material(
@@ -28,7 +28,7 @@ class AppDrawer extends StatelessWidget {
         child: SizedBox.expand(
           child: Stack(
             children: [
-              // Deep atmospheric navy gradient
+          
               DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -50,7 +50,7 @@ class AppDrawer extends StatelessWidget {
                 child: SizedBox.expand(),
               ),
 
-              // Ambient blue radial glow (top-right, behind header & extending right)
+             
               Positioned(
                 top: -40,
                 right: 20,
@@ -71,7 +71,6 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
 
-              // Ambient blue radial glow (bottom-left)
               Positioned(
                 left: -80,
                 bottom: -60,
@@ -92,7 +91,6 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
 
-              // Drawer content column
               SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,16 +168,22 @@ class AppDrawer extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           _SectionLabel(leftPadding: 20),
-                          _DrawerItem(
-                            id: 'dark_mode',
-                            icon: Icons.dark_mode_outlined,
-                            label: 'Dark Mode',
-                            showChevron: false,
-                            width: drawerMenuWidth,
-                            onTap: () {
-                              controller.selectDrawerItem('dark_mode');
-                              controller.toggleTheme();
-                            },
+                          Obx(
+                            () => _DrawerItem(
+                              id: 'dark_mode',
+                              icon: controller.isDarkMode.value
+                                  ? Icons.light_mode_outlined
+                                  : Icons.dark_mode_outlined,
+                              label: controller.isDarkMode.value
+                                  ? 'Light Mode'
+                                  : 'Dark Mode',
+                              showChevron: false,
+                              width: drawerMenuWidth,
+                              onTap: () {
+                                controller.selectDrawerItem('dark_mode');
+                                controller.toggleTheme();
+                              },
+                            ),
                           ),
                           _DrawerItem(
                             id: 'update',
@@ -221,7 +225,7 @@ class _SectionLabel extends StatelessWidget {
       child: const Text(
         'Account Setting',
         style: TextStyle(
-          color: Color(0xFF8E99A4),
+          color: Color(0xFFFFFFFF),
           fontSize: 13,
           fontWeight: FontWeight.w600,
           decoration: TextDecoration.none,

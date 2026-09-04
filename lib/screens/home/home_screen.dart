@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 
@@ -246,20 +247,50 @@ class _HostelsBody extends StatelessWidget {
   }
 }
 
-class _Header extends StatelessWidget {
+class _Header extends StatefulWidget {
   const _Header();
+
+  @override
+  State<_Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<_Header> {
+  Timer? greetingTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    greetingTimer = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    greetingTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final primaryText = Theme.of(context).colorScheme.onSurface;
     final iconBackground = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08);
+final hour = DateTime.now().hour;
+
+final greeting = hour >= 5 && hour < 12
+    ? 'Good Morning'
+    : hour >= 12 && hour < 17
+        ? 'Good Afternoon'
+        : hour >= 17
+            ? 'Good Evening'
+            : 'Good Night';
     return Row(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Good Morning',
+                greeting,
                 style: TextStyle(
                   fontSize: 34,
                   height: 1.1,

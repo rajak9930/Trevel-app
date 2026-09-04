@@ -9,9 +9,51 @@ class RemoteImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.zero,
-        child: Image.network(url, fit: fit, errorBuilder: (context, error, stackTrace) => Container(color: Colors.blueGrey.shade900, child: const Icon(Icons.image_outlined, color: Colors.white54, size: 42))),
+        child: Image.network(
+          url,
+          fit: fit,
+          loadingBuilder: (context, child, progress) {
+            if (progress == null) return child;
+            return _ImageLoadingState(
+              progress: progress.expectedTotalBytes == null
+                  ? null
+                  : progress.cumulativeBytesLoaded /
+                      progress.expectedTotalBytes!,
+            );
+          },
+          errorBuilder: (context, error, stackTrace) => Container(
+            color: Colors.blueGrey.shade900,
+            child: const Icon(
+              Icons.image_outlined,
+              color: Colors.white54,
+              size: 42,
+            ),
+          ),
+        ),
       );
 }
+
+class _ImageLoadingState extends StatelessWidget {
+  const _ImageLoadingState({this.progress});
+
+  final double? progress;
+
+  @override
+  Widget build(BuildContext context) => ColoredBox(
+        color: Colors.black.withValues(alpha: 0.12),
+        child: Center(
+          child: SizedBox(
+            width: 30,
+            height: 30,
+            child: CircularProgressIndicator(
+              value: progress,
+              strokeWidth: 2.5,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      );
+    }
 
 class RemoteAvatar extends StatelessWidget {
   const RemoteAvatar({super.key, required this.url, required this.radius});

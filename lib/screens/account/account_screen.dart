@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/app_controller.dart';
 import '../../widgets/app_background.dart';
-import '../../widgets/bottom_nav.dart';
 import '../../widgets/setting_tile.dart';
 import '../../routes/app_routes.dart';
 
@@ -13,18 +12,7 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) => const AppBackground(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          extendBody: true,
-          body: Stack(
-            children: [
-              const AccountBody(),
-              const Positioned(
-                left: 0,
-                right: 0,
-                bottom: 18,
-                child: BottomNav(),
-              ),
-            ],
-          ),
+          body: AccountBody(),
         ),
       );
 }

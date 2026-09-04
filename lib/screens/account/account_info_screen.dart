@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/app_theme.dart';
 import '../../widgets/app_background.dart';
-import '../../widgets/bottom_nav.dart';
 
 class AccountInfoScreen extends StatelessWidget {
   const AccountInfoScreen({super.key, required this.title, required this.subtitle, required this.icon, required this.action});
@@ -16,10 +15,8 @@ class AccountInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) => AppBackground(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: Stack(
-            children: [
-              SafeArea(
-                child: ListView(
+          body: SafeArea(
+            child: ListView(
               padding: const EdgeInsets.fromLTRB(28, 22, 28, 32),
               children: [
                 Row(children: [IconButton(onPressed: Get.back, icon: const Icon(Icons.arrow_back)), const SizedBox(width: 8), Expanded(child: Text(title, style: const TextStyle(fontSize: 29, fontWeight: FontWeight.w800)))]),
@@ -42,15 +39,7 @@ class AccountInfoScreen extends StatelessWidget {
                 const SizedBox(height: 18),
                 FilledButton.icon(onPressed: () => Get.snackbar(title, action == 'Coming Soon' ? 'This feature will be available soon.' : '$action opened.', snackPosition: SnackPosition.BOTTOM, margin: const EdgeInsets.all(16)), icon: Icon(action == 'Coming Soon' ? Icons.schedule : Icons.arrow_forward), label: Text(action)),
               ],
-                ),
-              ),
-              const Positioned(
-                left: 0,
-                right: 0,
-                bottom: 18,
-                child: BottomNav(),
-              ),
-            ],
+            ),
           ),
         ),
       );

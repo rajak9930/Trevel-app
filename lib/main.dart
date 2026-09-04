@@ -15,7 +15,6 @@ import 'screens/account/account_action_screen.dart';
 import 'screens/account/account_info_screen.dart';
 
 void main() {
-  // Disable Flutter debug painting
   debugPaintSizeEnabled = false;
   debugPaintBaselinesEnabled = false;
   debugPaintPointersEnabled = false;
@@ -37,6 +36,8 @@ class TravelApp extends StatelessWidget {
       return GetMaterialApp(
         title: 'NextRole Travel',
         debugShowCheckedModeBanner: false,
+        defaultTransition: Transition.rightToLeftWithFade,
+        transitionDuration: const Duration(milliseconds: 280),
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
         themeMode: controller.isDarkMode.value

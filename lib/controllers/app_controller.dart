@@ -14,6 +14,8 @@ class AppController extends GetxController {
   final selectedDrawerItem = 'payment'.obs;
   final visibleMonth = DateTime(2026, 2).obs;
   final selectedDays = <int>{24, 25}.obs;
+  final bookingStart = Rxn<DateTime>();
+  final bookingEnd = Rxn<DateTime>();
 
   void updateSearch(String query) {
     searchQuery.value = query.trim();
@@ -21,6 +23,11 @@ class AppController extends GetxController {
 
   void clearSearch() {
     searchQuery.value = '';
+  }
+
+  void setBookingRange(DateTime? start, DateTime? end) {
+    bookingStart.value = start;
+    bookingEnd.value = end;
   }
 
   void selectDrawerItem(String id) {

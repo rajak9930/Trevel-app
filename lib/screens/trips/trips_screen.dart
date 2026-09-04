@@ -15,8 +15,8 @@ class TripsScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              const TripsBody(),
-              const Positioned(
+              TripsBody(),
+              Positioned(
                 left: 0,
                 right: 0,
                 bottom: 18,
@@ -75,6 +75,25 @@ class _TripCard extends StatelessWidget {
                 width: 92,
                 height: 112,
                 fit: BoxFit.cover,
+                loadingBuilder: (context, child, progress) {
+                  if (progress == null) return child;
+                  return Container(
+                    width: 92,
+                    height: 112,
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08),
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        value: progress.expectedTotalBytes == null
+                            ? null
+                            : progress.cumulativeBytesLoaded / progress.expectedTotalBytes!,
+                      ),
+                    ),
+                  );
+                },
                 errorBuilder: (context, error, stackTrace) => Container(
                   width: 92,
                   height: 112,

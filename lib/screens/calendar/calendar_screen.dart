@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../controllers/app_controller.dart';
 import '../../core/theme/app_theme.dart';
+import '../../routes/app_routes.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/bottom_nav.dart';
 
@@ -14,8 +16,8 @@ class CalendarScreen extends StatelessWidget {
           extendBody: true,
           body: Stack(
             children: [
-              const CalendarBody(),
-              const Positioned(
+              CalendarBody(),
+              Positioned(
                 left: 0,
                 right: 0,
                 bottom: 18,
@@ -35,6 +37,7 @@ class CalendarBody extends StatefulWidget {
 }
 
 class _CalendarBodyState extends State<CalendarBody> {
+  final controller = Get.find<AppController>();
   DateTime? rangeStart;
   DateTime? rangeEnd;
   String selectedDatesText = 'Select your dates';
@@ -72,7 +75,6 @@ class _CalendarBodyState extends State<CalendarBody> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
         children: [
-          // Header
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -106,6 +108,7 @@ class _CalendarBodyState extends State<CalendarBody> {
                     rangeStart = null;
                     rangeEnd = null;
                     selectedDatesText = 'Dates cleared';
+                    controller.setBookingRange(null, null);
                   });
                   Get.snackbar(
                     'Dates Cancelled',
@@ -130,8 +133,6 @@ class _CalendarBodyState extends State<CalendarBody> {
           ),
 
           const SizedBox(height: 40),
-
-          // Calendar Card
           Container(
             padding: const EdgeInsets.fromLTRB(18, 22, 18, 24),
             decoration: BoxDecoration(
@@ -180,14 +181,17 @@ class _CalendarBodyState extends State<CalendarBody> {
                       if (rangeStart == null || rangeEnd != null) {
                         rangeStart = date;
                         rangeEnd = null;
+                        controller.setBookingRange(date, null);
                         selectedDatesText =
                             'Start: ${_dateLabel(date)}';
                       } else if (date.isBefore(rangeStart!)) {
                         rangeStart = date;
+                        controller.setBookingRange(date, null);
                         selectedDatesText =
                             'Start: ${_dateLabel(date)}';
                       } else {
                         rangeEnd = date;
+                        controller.setBookingRange(rangeStart, date);
                         selectedDatesText =
                             '${_dateLabel(rangeStart!)} – ${_dateLabel(date)}';
                       }
@@ -227,6 +231,15 @@ class _CalendarBodyState extends State<CalendarBody> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 32),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () => Get.toNamed(AppRoutes.booking),
+              icon: const Icon(Icons.calendar_month_outlined),
+              label: const Text('Open booking calendar'),
+            ),
           ),
         ],
       ),
