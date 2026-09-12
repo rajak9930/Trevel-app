@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
     final controller = Get.find<AppController>();
     final drawerController = controller.zoomDrawerController;
     final size = MediaQuery.sizeOf(context);
-    final slideWidth = size.width * 0.74;
+    final slideWidth = (size.width * 0.74).clamp(260.0, 360.0).toDouble();
 
     return ZoomDrawer(
       controller: drawerController,
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 18,
+                bottom: 12,
                 child: Obx(
                     () => controller.selectedTab.value == 1 &&
                       controller.isDetailOpen.value
@@ -286,9 +286,10 @@ final greeting = hour >= 5 && hour < 12
             : 'Good Night';
     return Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Text(
                 greeting,
                 style: TextStyle(
@@ -307,7 +308,8 @@ final greeting = hour >= 5 && hour < 12
                   color: primaryText,
                 ),
               ),
-            ],
+              ],
+            ),
           ),
           const Spacer(),
           GestureDetector(

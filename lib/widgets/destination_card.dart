@@ -58,11 +58,10 @@ class DestinationCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _meta(context, 'Distance', destination.distance),
-                        _meta(context, 'Available', destination.available),
-                        _meta(context, 'Price', destination.price),
+                        Expanded(child: _meta(context, 'Distance', destination.distance)),
+                        Expanded(child: _meta(context, 'Available', destination.available)),
+                        Expanded(child: _meta(context, 'Price', destination.price)),
                       ],
                     ),
                   ],
@@ -83,6 +82,8 @@ class DestinationCard extends StatelessWidget {
         children: [
           Text(
             label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: secondaryText,
               fontSize: 13,
@@ -92,6 +93,8 @@ class DestinationCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: primaryText,
               fontSize: 16,

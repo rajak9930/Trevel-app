@@ -15,7 +15,7 @@ class AppDrawer extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenWidth = MediaQuery.sizeOf(context).width;
    
-    final drawerMenuWidth = (screenWidth * 0.65).clamp(240.0, 275.0);
+    final drawerMenuWidth = (screenWidth * 0.65).clamp(220.0, 275.0);
 
     return Material(
       type: MaterialType.transparency,

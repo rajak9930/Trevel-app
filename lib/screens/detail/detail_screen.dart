@@ -137,10 +137,11 @@ class DetailBody extends StatelessWidget {
                   const SizedBox(height: 22),
 
                
-                  Row(
+                  Wrap(
+                    spacing: 14,
+                    runSpacing: 8,
                     children: [
                       Icon(Icons.star, color: primaryText, size: 18),
-                      const SizedBox(width: 6),
                       Text(
                         '4.9',
                         style: TextStyle(
@@ -149,14 +150,12 @@ class DetailBody extends StatelessWidget {
                           fontSize: 14,
                         ),
                       ),
-                      const SizedBox(width: 14),
                       Text(
                         '|',
                         style: TextStyle(
                           color: primaryText.withValues(alpha: 0.3),
                         ),
                       ),
-                      const SizedBox(width: 14),
                       Text(
                         '1,648 reviews',
                         style: TextStyle(
@@ -164,14 +163,12 @@ class DetailBody extends StatelessWidget {
                           fontSize: 14,
                         ),
                       ),
-                      const SizedBox(width: 14),
                       Text(
                         '|',
                         style: TextStyle(
                           color: primaryText.withValues(alpha: 0.3),
                         ),
                       ),
-                      const SizedBox(width: 14),
                       Text(
                         'OCT 24 – 26',
                         style: TextStyle(

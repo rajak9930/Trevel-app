@@ -20,7 +20,7 @@ class CalendarScreen extends StatelessWidget {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 18,
+                bottom: 12,
                 child: BottomNav(),
               ),
             ],
@@ -298,8 +298,8 @@ class _MonthGrid extends StatelessWidget {
           onTap: () => onSelectDay(date),
           child: Center(
             child: Container(
-              width: 38,
-              height: 38,
+              margin: const EdgeInsets.all(2),
+              constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
               decoration: BoxDecoration(
                 color: isStart || isEnd
                   ? AppColors.blue

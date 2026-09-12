@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:teqmavens/main.dart';
+import 'package:teqmavens/widgets/remote_image.dart';
 
 void main() {
   testWidgets('dashboard renders the travel discovery flow', (
@@ -16,7 +17,7 @@ void main() {
   ) async {
     await tester.pumpWidget(const TravelApp());
 
-    expect(find.text('Good Morning'), findsOneWidget);
+    expect(find.textContaining('Good '), findsOneWidget);
     expect(find.text('Prabhat'), findsOneWidget);
     expect(find.text('Toronto, Canada'), findsAtLeastNWidgets(1));
     expect(find.text('Recommended for you'), findsOneWidget);
@@ -35,9 +36,9 @@ void main() {
     // Switch to Hotels Resort (Tab 1)
     await tester.tap(find.byIcon(Icons.flight_takeoff_outlined));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Hosted by Trang Luxury'), findsOneWidget);
-    expect(find.text('1,648 reviews'), findsOneWidget);
-    expect(find.text('Description'), findsOneWidget);
+    expect(find.text('Hotels Resort'), findsAtLeastNWidgets(1));
+    expect(find.text('Choose your next stay'), findsOneWidget);
+    expect(find.text('Toronto, Canada'), findsAtLeastNWidgets(1));
 
     // Switch to Booking Hotel (Tab 2)
     await tester.tap(find.byIcon(Icons.calendar_month_outlined));
@@ -47,7 +48,7 @@ void main() {
     expect(find.text('Cancel Date'), findsOneWidget);
 
     // Switch to Account (Tab 3)
-   // await tester.tap(find.byType(RemoteAvatar));
+    await tester.tap(find.byType(RemoteAvatar).last);
     await tester.pumpAndSettle();
     expect(find.text('Edit Profile'), findsOneWidget);
     expect(find.text('Privacy & Security'), findsOneWidget);

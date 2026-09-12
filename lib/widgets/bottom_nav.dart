@@ -39,8 +39,12 @@ class BottomNav extends StatelessWidget {
          
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final maxActiveWidth = (constraints.maxWidth - 3 * 56 - 32)
-                  .clamp(56.0, double.infinity)
+              final compact = constraints.maxWidth < 256;
+              final collapsedWidth = compact ? 48.0 : 56.0;
+              final maxActiveWidth = (constraints.maxWidth -
+                  3 * collapsedWidth -
+                  32)
+                .clamp(collapsedWidth, double.infinity)
                   .toDouble();
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,6 +53,7 @@ class BottomNav extends StatelessWidget {
                     active: selected == 0,
                     label: 'Dashboard',
                     maxActiveWidth: maxActiveWidth,
+                    compact: compact,
                     onTap: () => controller.selectTab(0),
                     child: const Icon(Icons.home_outlined),
                   ),
@@ -56,6 +61,7 @@ class BottomNav extends StatelessWidget {
                     active: selected == 1,
                     label: 'Hotels Resort',
                     maxActiveWidth: maxActiveWidth,
+                    compact: compact,
                     onTap: () => controller.selectTab(1),
                     child: const Icon(Icons.flight_takeoff_outlined),
                   ),
@@ -63,6 +69,7 @@ class BottomNav extends StatelessWidget {
                     active: selected == 2,
                     label: 'Booking Hotel',
                     maxActiveWidth: maxActiveWidth,
+                    compact: compact,
                     onTap: () => controller.selectTab(2),
                     child: const Icon(Icons.calendar_month_outlined),
                   ),
@@ -70,6 +77,7 @@ class BottomNav extends StatelessWidget {
                     active: selected == 3,
                     label: 'Account',
                     maxActiveWidth: maxActiveWidth,
+                    compact: compact,
                     onTap: () => controller.selectTab(3),
                     child: const RemoteAvatar(radius: 14, url: _profile),
                   ),
@@ -89,6 +97,7 @@ class _NavSlot extends StatelessWidget {
     required this.onTap,
     required this.child,
     required this.maxActiveWidth,
+    required this.compact,
     this.label,
   });
 
@@ -96,6 +105,7 @@ class _NavSlot extends StatelessWidget {
   final VoidCallback onTap;
   final Widget child;
   final double maxActiveWidth;
+  final bool compact;
   final String? label;
 
   static const _duration = Duration(milliseconds: 320);
@@ -115,8 +125,10 @@ class _NavSlot extends StatelessWidget {
       maxLines: 1,
       textDirection: TextDirection.ltr,
     )..layout();
-    return (_horizontalPadding * 2) +
-        _iconSize +
+    final horizontalPadding = compact ? 6.0 : _horizontalPadding;
+    final iconSize = compact ? 20.0 : _iconSize;
+    return (horizontalPadding * 2) +
+      iconSize +
         _labelGap +
         tp.width +
         4; 
@@ -125,7 +137,8 @@ class _NavSlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final showLabel = active && label != null;
-    final expandedWidth = showLabel ? _expandedWidth(label!) : _collapsedWidth;
+    final collapsedWidth = compact ? 48.0 : _collapsedWidth;
+    final expandedWidth = showLabel ? _expandedWidth(label!) : collapsedWidth;
     final targetWidth = expandedWidth > maxActiveWidth
       ? maxActiveWidth
       : expandedWidth;
@@ -151,8 +164,8 @@ class _NavSlot extends StatelessWidget {
               borderRadius: BorderRadius.circular(28),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: _horizontalPadding,
+              padding: EdgeInsets.symmetric(
+                horizontal: compact ? 6 : _horizontalPadding,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -172,7 +185,7 @@ class _NavSlot extends StatelessWidget {
                               Colors.white,
                               t,
                             ),
-                            size: _iconSize,
+                            size: compact ? 20 : _iconSize,
                           ),
                           child: animChild!,
                         ),
